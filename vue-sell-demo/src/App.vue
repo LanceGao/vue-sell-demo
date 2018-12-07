@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <v-header></v-header>
+    <v-header :seller="seller"></v-header>
   </div>
 </template>
 
 <script>
 import VHeader from 'components/v-header/v-header.vue'
-import { getSeller } from 'api'
+import { getSeller } from './api'
 
 export default {
   name: 'app',

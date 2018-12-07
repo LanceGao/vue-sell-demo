@@ -2,28 +2,29 @@
   <div class="header">
     <div class="content-wrapper">
       <div class="avatar">
-        <img width="64" height="64">
+        <img width="64" height="64" :src="seller.avatar">
       </div>
       <div class="content">
         <div class="title">
           <span class="brand"></span>
-          <span class="name"></span>
+          <span class="name">{{seller.name}}</span>
         </div>
         <div class="description">
-          分钟送达
+          {{seller.description}}/{{seller.deliveryTime}}分钟送达
         </div>
-        <div class="support">
-          <support-ico></support-ico>
-          <span class="text"></span>
+        <!-- 这里加的v-if是为了兼容seller.supports为空时报错 -->
+        <div class="support" v-if="seller.supports">
+          <support-ico :type="seller.supports[0].type" :size=1></support-ico>
+          <span class="text">{{seller.supports[0].description}}</span>
         </div>
       </div>
-      <div class="support-count">
-        <span class="count">个</span>
+      <div class="support-count" v-if="seller.supports">
+        <span class="count">{{seller.supports.length}}个</span>
         <i class="icon-keyboard_arrow_right"></i>
       </div>
     </div>
     <div class="bulletin-wrapper">
-      <span class="bulletin-title"></span><span class="bulletin-text"></span>
+      <span class="bulletin-title"></span><span class="bulletin-text">{{seller.bulletin}}</span>
       <i class="icon-keyboard_arrow_right"></i>
     </div>
     <div class="background">
@@ -37,6 +38,14 @@ import SupportIco from 'components/support-ico/support-ico.vue'
 
 export default {
   name: 'v-header',
+  props: {
+    seller: {
+      type: Object,
+      default() {
+        return {} // 这里默认为空对象也是为了兼容seller未返回时报错
+      }
+    }
+  },
   components: {
     SupportIco
   }

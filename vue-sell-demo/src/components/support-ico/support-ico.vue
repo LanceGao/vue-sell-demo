@@ -1,10 +1,24 @@
 <template>
-  <span></span>
+  <span class="support-ico" :class="icoCls"></span>
 </template>
 
 <script>
   export default {
-    name: 'support-ico'
+    name: 'support-ico',
+    props: {
+      size: {
+        type: Number
+      },
+      type: {
+        type: Number
+      }
+    },
+    computed: {
+      icoCls() {
+        const classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special']
+        return `icon-${this.size} ${classMap[this.type]}`
+      }
+    }
   }
 </script>
 
