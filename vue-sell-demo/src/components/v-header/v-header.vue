@@ -28,7 +28,7 @@
       <i class="icon-keyboard_arrow_right"></i>
     </div>
     <div class="background">
-      <img width="100%" height="100%">
+      <img width="100%" height="100%" :src="seller.avatar">
     </div>
   </div>
 </template>
