@@ -18,12 +18,12 @@
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
       </div>
-      <div class="support-count" v-if="seller.supports">
+      <div class="support-count" v-if="seller.supports" @click="showHeaderDetail">
         <span class="count">{{seller.supports.length}}个</span>
         <i class="icon-keyboard_arrow_right"></i>
       </div>
     </div>
-    <div class="bulletin-wrapper">
+    <div class="bulletin-wrapper" @click="showHeaderDetail">
       <span class="bulletin-title"></span><span class="bulletin-text">{{seller.bulletin}}</span>
       <i class="icon-keyboard_arrow_right"></i>
     </div>
@@ -44,6 +44,16 @@ export default {
       default() {
         return {} // 这里默认为空对象也是为了兼容seller未返回时报错
       }
+    }
+  },
+  methods: {
+    showHeaderDetail() {
+      this.headerDetailComp = this.headerDetailComp || this.$createHeaderDetail({
+        $props: {
+          seller: 'seller'
+        }
+      })
+      this.headerDetailComp.show()
     }
   },
   components: {

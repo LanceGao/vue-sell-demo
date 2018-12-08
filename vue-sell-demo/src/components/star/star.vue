@@ -19,23 +19,15 @@ export default {
       type: Number
     }
   },
-  created() {
-    setTimeout(() => {
-      console.log('star', this.size)
-    }, 0)
-  },
   computed: {
     classType() {
       return 'star-' + this.size
     },
     itemClasses() {
       let result = []
-
-      console.log('score', this.score)
-
-      var score = Math.floor(this.score * 2) / 2
-      var integer = Math.floor(score)
-      var hasDecimal = score % 1 !== 0
+      const score = Math.floor(this.score * 2) / 2
+      const integer = Math.floor(score)
+      const hasDecimal = score % 1 !== 0
       for (let i = 0; i < integer; i++) {
         result.push(CLS_ON)
       }

@@ -1,5 +1,5 @@
 <template>
-  <div class="header-detail">
+  <div class="header-detail" v-show="visible">
     <div class="detail-wrapper clear-fix">
       <div class="detail-main">
         <h1 class="name">{{seller.name}}</h1>
@@ -13,7 +13,7 @@
         </div>
         <ul class="supports">
           <li class="support-item" v-for="support of seller.supports" :key="support.type">
-            <support-ico :type="support.type"></support-ico>
+            <support-ico :type="support.type" :size=2></support-ico>
             <span class="text">{{support.description}}</span>
           </li>
         </ul>
@@ -27,7 +27,7 @@
         </div>
       </div>
     </div>
-    <div class="detail-close">
+    <div class="detail-close" @click="hide">
       <i class="icon-close"></i>
     </div>
   </div>
@@ -39,6 +39,11 @@
 
   export default {
     name: 'header-detail',
+    data() {
+      return {
+        visible: false
+      }
+    },
     props: {
       seller: {
         type: Object,
@@ -52,6 +57,14 @@
       setTimeout(() => {
         console.log('header-detail', this.seller)
       }, 0)
+    },
+    methods: {
+      show() {
+        this.visible = true
+      },
+      hide() {
+        this.visible = false
+      }
     },
     components: {
       'star': star,
