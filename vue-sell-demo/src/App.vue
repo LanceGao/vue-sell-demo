@@ -2,13 +2,16 @@
   <div id="app">
     <v-header :seller="seller"></v-header>
     <div class="tab-wrapper">
-      <tab></tab>
+      <tab :tabs="tabs"></tab>
     </div>
   </div>
 </template>
 
 <script>
 import VHeader from 'components/v-header/v-header.vue'
+import Goods from 'components/goods/goods'
+import Ratings from 'components/ratings/ratings'
+import Seller from 'components/seller/seller'
 import Tab from 'components/tab/tab'
 import { getSeller } from './api'
 
@@ -30,6 +33,29 @@ export default {
         this.seller = data
         console.log(this.seller)
       })
+    }
+  },
+  computed: {
+    tabs() {
+      return [{
+        label: '商品',
+        components: Goods,
+        data: {
+          seller: this.seller
+        }
+      }, {
+        label: '评论',
+        components: Ratings,
+        data: {
+          seller: this.seller
+        }
+      }, {
+        label: '商家',
+        components: Seller,
+        data: {
+          seller: this.seller
+        }
+      }]
     }
   },
   components: {
