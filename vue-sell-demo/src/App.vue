@@ -23,7 +23,6 @@ export default {
     }
   },
   created() {
-    console.log('created', this)
     this._getSeller()
   },
   methods: {
@@ -31,7 +30,6 @@ export default {
       getSeller().then((data) => {
         console.log('methods', this)
         this.seller = data
-        console.log(this.seller)
       })
     }
   },
