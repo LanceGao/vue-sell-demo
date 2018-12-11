@@ -27,6 +27,7 @@
                   <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
               </div>
+              <cart-control :food="food"></cart-control>
             </li>
           </ul>
         </cube-scroll-nav-panel>
@@ -34,8 +35,9 @@
     </div>
     <div class="shop-cart-wrapper">
       <shop-cart
-      :minPrice="seller.minPrice"
-      :deliveryPrice="seller.deliveryPrice">
+      :select-foods="selectFoods"
+      :min-price="seller.minPrice"
+      :delivery-price="seller.deliveryPrice">
       </shop-cart>
     </div>
   </div>
@@ -43,6 +45,7 @@
 
 <script>
   import ShopCart from 'components/shop-cart/shop-cart'
+  import CartControl from 'components/cart-control/cart-control'
   import { getGoods } from 'api'
 
   export default {
@@ -67,6 +70,17 @@
     computed: {
       seller() {
         return this.data.seller
+      },
+      selectFoods() {
+        let ret = []
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              ret.push(food)
+            }
+          })
+        })
+        return ret
       }
     },
     methods: {
@@ -77,7 +91,8 @@
       }
     },
     components: {
-      ShopCart
+      ShopCart,
+      CartControl
     }
   }
 </script>
@@ -171,6 +186,10 @@
             text-decoration: line-through
             font-size: $fontsize-small-s
             color: $color-light-grey
+      .cart-control-wrapper
+        position: absolute
+        right: 0
+        bottom: 12px
     .shop-cart-wrapper
       position: absolute
       left: 0
