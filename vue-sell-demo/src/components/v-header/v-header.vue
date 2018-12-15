@@ -50,7 +50,7 @@ export default {
     showHeaderDetail() {
       this.headerDetailComp = this.headerDetailComp || this.$createHeaderDetail({
         $props: {
-          seller: 'seller'
+          seller: 'seller' // 字符串的方式，保证响应式的
         }
       })
       this.headerDetailComp.show()
