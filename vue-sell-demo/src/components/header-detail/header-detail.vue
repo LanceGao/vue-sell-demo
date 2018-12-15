@@ -36,14 +36,11 @@
 <script>
   import star from 'components/star/star.vue'
   import SupportIco from 'components/support-ico/support-ico.vue'
+  import mixinPopup from 'common/mixins/popup.js'
 
   export default {
+    mixins: [mixinPopup],
     name: 'header-detail',
-    data() {
-      return {
-        visible: false
-      }
-    },
     props: {
       seller: {
         type: Object,
@@ -57,14 +54,6 @@
       setTimeout(() => {
         console.log('header-detail', this.seller)
       }, 0)
-    },
-    methods: {
-      show() {
-        this.visible = true
-      },
-      hide() {
-        this.visible = false
-      }
     },
     components: {
       'star': star,

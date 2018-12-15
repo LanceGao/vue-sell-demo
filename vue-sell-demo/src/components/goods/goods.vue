@@ -122,9 +122,12 @@
     },
     methods: {
       fetch() {
-        getGoods().then((data) => {
-          this.goods = data
-        })
+        if (!this.fetched) {
+          this.fetched = true
+          getGoods().then((data) => {
+            this.goods = data
+          })
+        }
       },
       onAdd(el) {
         this.$refs.shopCart.drop(el)

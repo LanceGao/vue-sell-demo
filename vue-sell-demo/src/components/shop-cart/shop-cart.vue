@@ -15,7 +15,7 @@
           <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
         </div>
         <div class="content-right">
-          <div class="pay" :class="payClass">
+          <div @click="pay" class="pay" :class="payClass">
             {{payDesc}}
           </div>
         </div>
@@ -88,6 +88,16 @@
       this.dropBalls = []
     },
     methods: {
+      pay(el) {
+        if (this.totalPrice < this.minPrice) {
+          return
+        }
+        this.$createDialog({
+          title: '支付',
+          content: `支付${this.totalPrice}元`
+        }).show()
+        el.stopPropagation()
+      },
       drop(el) {
         console.log('shopcart', el)
         for (let i = 0; i < this.balls.length; i++) {
@@ -144,7 +154,8 @@
           },
           $events: {
             hide: 'hide',
-            leave: 'leave'
+            leave: 'leave',
+            add: 'add'
           }
         })
         this.shopCartListComp.show()
@@ -167,6 +178,9 @@
       leave() {
         this.shopCartStickyComp.hide()
       },
+      add(el) {
+        this.shopCartStickyComp.drop(el)
+      },
       _hideShopCartList() {
         const list = this.sticky ? this.$parent.list : this.shopCartListComp
         list.hide()
@@ -188,7 +202,7 @@
         return total
       },
       payClass() {
-        if (this.totalPrice > this.minPrice) {
+        if (this.totalPrice >= this.minPrice) {
           return 'enough'
         } else {
           return 'not-enough'
@@ -198,7 +212,7 @@
         if (this.minPrice > this.totalPrice > 0) {
           let diff = this.minPrice - this.totalPrice
           return '还差¥' + diff + '元起送'
-        } else if (this.totalPrice > this.minPrice) {
+        } else if (this.totalPrice >= this.minPrice) {
           return '去结算'
         } else {
           return '¥' + this.minPrice + '元起送'
@@ -208,6 +222,11 @@
     watch: {
       fold(newVal) {
         this.listFold = newVal
+      },
+      totalCount(newVal) {
+        if (!this.listFold && !newVal) {
+          this._hideShopCartList()
+        }
       }
     },
     components: {
