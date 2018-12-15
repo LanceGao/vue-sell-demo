@@ -56,7 +56,8 @@
     name: 'shop-cart',
     data() {
       return {
-        balls: createBall()
+        balls: createBall(),
+        listFold: this.fold
       }
     },
     props: {
@@ -73,11 +74,18 @@
       minPrice: {
         type: Number,
         default: 0
+      },
+      fold: {
+        type: Boolean,
+        default: true
+      },
+      sticky: {
+        type: Boolean,
+        default: false
       }
     },
     created() {
       this.dropBalls = []
-      this.listFold = true
     },
     methods: {
       drop(el) {
@@ -123,6 +131,7 @@
           }
           this.listFold = false
           this._showShopCartList()
+          this._showShopCartSticky()
         } else {
           this.listFold = true
           this._hideShopCartList()
@@ -134,16 +143,33 @@
             selectFoods: 'selectFoods'
           },
           $events: {
-            hide: 'hide'
+            hide: 'hide',
+            leave: 'leave'
           }
         })
         this.shopCartListComp.show()
       },
+      _showShopCartSticky() {
+        this.shopCartStickyComp = this.shopCartStickyComp || this.$createShopCartSticky({
+          $props: {
+            selectFoods: 'selectFoods',
+            minPrice: 'minPrice',
+            deliveryPrice: 'deliveryPrice',
+            fold: 'listFold',
+            list: this.shopCartListComp
+          }
+        })
+        this.shopCartStickyComp.show()
+      },
       hide() {
         this.listFold = true
       },
+      leave() {
+        this.shopCartStickyComp.hide()
+      },
       _hideShopCartList() {
-        this.shopCartListComp.hide()
+        const list = this.sticky ? this.$parent.list : this.shopCartListComp
+        list.hide()
       }
     },
     computed: {
@@ -177,6 +203,11 @@
         } else {
           return '¥' + this.minPrice + '元起送'
         }
+      }
+    },
+    watch: {
+      fold(newVal) {
+        this.listFold = newVal
       }
     },
     components: {

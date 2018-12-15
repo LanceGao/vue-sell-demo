@@ -7,7 +7,8 @@
     position="bottom"
     :z-index=90
     @mask-click="maskClick">
-      <transition name="move">
+      <transition name="move"
+      @after-leave="afterLeave">
         <div v-show="visible">
           <div class="list-header">
             <h1 class="title">购物车</h1>
@@ -37,6 +38,7 @@
 <script>
 import CartControl from 'components/cart-control/cart-control'
 const EVENT_HIDE = 'hide'
+const EVENT_LEAVE = 'leave'
 
 export default {
   name: 'shop-cart-list',
@@ -63,6 +65,9 @@ export default {
     },
     maskClick() {
       this.hide()
+    },
+    afterLeave() {
+      this.$emit(EVENT_LEAVE)
     }
   },
   components: {
