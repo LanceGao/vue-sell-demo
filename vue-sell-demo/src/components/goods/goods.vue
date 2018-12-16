@@ -30,7 +30,7 @@
         :label="good.name"
         :title="good.name">
           <ul>
-            <li class="food-item" v-for="food of good.foods" :key="food.name">
+            <li class="food-item" @click="selectFood(food)" v-for="food of good.foods" :key="food.name">
               <div class="icon">
                 <img width="57" height="57" :src="food.icon">
               </div>
@@ -77,7 +77,8 @@
         options: {
           click: false,
           directionLockThreshold: 0
-        }
+        },
+        selectedFood: {}
       }
     },
     props: {
@@ -131,6 +132,41 @@
       },
       onAdd(el) {
         this.$refs.shopCart.drop(el)
+      },
+      selectFood(food) {
+        this.selectedFood = food
+        this._showFood()
+        this._showShopCartSticky()
+      },
+      _showFood() {
+        this.foodComp = this.foodComp || this.$createFood({
+          $props: {
+            food: 'selectedFood'
+          },
+          $events: {
+            leave: () => {
+              this._hideShopCartSticky()
+            },
+            add: (el) => {
+              this.shopCartStickyComp.drop(el)
+            }
+          }
+        })
+        this.foodComp.show()
+      },
+      _showShopCartSticky() {
+        this.shopCartStickyComp = this.shopCartStickyComp || this.$createShopCartSticky({
+          $props: {
+            selectFoods: 'selectFoods',
+            minPrice: this.seller.minPrice,
+            deliveryPrice: this.seller.deliveryPrice,
+            fold: true
+          }
+        })
+        this.shopCartStickyComp.show()
+      },
+      _hideShopCartSticky() {
+        this.shopCartStickyComp.hide()
       }
     },
     components: {
