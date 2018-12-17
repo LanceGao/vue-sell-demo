@@ -37,10 +37,18 @@
           <split></split>
           <div class="rating">
             <h1 class="title">商品评价</h1>
+            <rating-select
+            :ratings="ratings"
+            :selectType="selectType"
+            :desc="desc"
+            :onlyContent="onlyContent"
+            @select="onSelect"
+            @toggle="onToggle"
+            ></rating-select>
             <div class="rating-wrapper">
               <ul v-show="ratings && ratings.length">
                 <li
-                  v-for="(rating,index) in ratings"
+                  v-for="(rating,index) in computedRatings"
                   class="rating-item border-bottom-1px"
                   :key="index"
                 >
@@ -67,6 +75,7 @@
   import mixinsPoput from 'common/mixins/popup.js'
   import Split from 'components/split/split'
   import CartControl from 'components/cart-control/cart-control'
+  import RatingSelect from 'components/rating-select/rating-select'
   import moment from 'moment'
 
   const EVENT_SHOW = 'show'
@@ -76,6 +85,17 @@
   export default {
     mixins: [mixinsPoput],
     name: 'food',
+    data() {
+      return {
+        selectType: 2,
+        onlyContent: false,
+        desc: {
+          all: '全部',
+          positive: '好评',
+          negative: '吐槽'
+        }
+      }
+    },
     props: {
       food: {
         type: Object,
@@ -104,16 +124,35 @@
       },
       format(time) {
         return moment(time).format('YYYY-MM-DD hh:mm')
+      },
+      onSelect(type) {
+        this.selectType = type
+      },
+      onToggle() {
+        this.onlyContent = !this.onlyContent
       }
     },
     computed: {
       ratings() {
         return this.food.ratings
+      },
+      computedRatings() {
+        let ret = []
+        this.ratings.forEach((rating) => {
+          if (this.onlyContent && !rating.text) {
+            return
+          }
+          if (this.selectType === 2 || this.selectType === rating.rateType) {
+            ret.push(rating)
+          }
+        })
+        return ret
       }
     },
     components: {
       Split,
-      CartControl
+      CartControl,
+      RatingSelect
     }
   }
 </script>
