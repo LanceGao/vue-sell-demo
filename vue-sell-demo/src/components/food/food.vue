@@ -46,9 +46,9 @@
             @toggle="onToggle"
             ></rating-select>
             <div class="rating-wrapper">
-              <ul v-show="ratings && ratings.length">
+              <ul v-show="computedRatings && computedRatings.length">
                 <li
-                  v-for="(rating,index) in computedRatings"
+                  v-for="(rating, index) in computedRatings"
                   class="rating-item border-bottom-1px"
                   :key="index"
                 >
@@ -62,7 +62,7 @@
                   </p>
                 </li>
               </ul>
-              <!-- <div class="no-rating" v-show="!computedRatings || !computedRatings.length">暂无评价</div> -->
+              <div class="no-rating" v-show="!computedRatings || !computedRatings.length">暂无评价</div>
             </div>
           </div>
         </div>
@@ -73,6 +73,7 @@
 
 <script type="text/ecmascript-6">
   import mixinsPoput from 'common/mixins/popup.js'
+  import mixinRating from 'common/mixins/ratingSelect'
   import Split from 'components/split/split'
   import CartControl from 'components/cart-control/cart-control'
   import RatingSelect from 'components/rating-select/rating-select'
@@ -83,12 +84,10 @@
   const EVENT_ADD = 'add'
 
   export default {
-    mixins: [mixinsPoput],
+    mixins: [mixinsPoput, mixinRating],
     name: 'food',
     data() {
       return {
-        selectType: 2,
-        onlyContent: false,
         desc: {
           all: '全部',
           positive: '好评',
@@ -124,29 +123,11 @@
       },
       format(time) {
         return moment(time).format('YYYY-MM-DD hh:mm')
-      },
-      onSelect(type) {
-        this.selectType = type
-      },
-      onToggle() {
-        this.onlyContent = !this.onlyContent
       }
     },
     computed: {
       ratings() {
         return this.food.ratings
-      },
-      computedRatings() {
-        let ret = []
-        this.ratings.forEach((rating) => {
-          if (this.onlyContent && !rating.text) {
-            return
-          }
-          if (this.selectType === 2 || this.selectType === rating.rateType) {
-            ret.push(rating)
-          }
-        })
-        return ret
       }
     },
     components: {
