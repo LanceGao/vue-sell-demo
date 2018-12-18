@@ -26,6 +26,7 @@
       </div>
       <split></split>
       <rating-select
+      v-if="ratings.length"
       :selectType="selectType"
       :onlyContent="onlyContent"
       :ratings="ratings"
