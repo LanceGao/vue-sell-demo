@@ -101,7 +101,9 @@ export default {
   },
   methods: {
     fetch() {
-      getRatings().then((data) => {
+      getRatings({
+        id: this.seller.id
+      }).then((data) => {
         this.ratings = data
       })
     },

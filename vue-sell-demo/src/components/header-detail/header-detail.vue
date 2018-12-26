@@ -49,12 +49,6 @@
         }
       }
     },
-    created() {
-      console.log('header-detail111', this.seller)
-      setTimeout(() => {
-        console.log('header-detail', this.seller)
-      }, 0)
-    },
     components: {
       'star': star,
       'support-ico': SupportIco

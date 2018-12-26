@@ -125,7 +125,9 @@
       fetch() {
         if (!this.fetched) {
           this.fetched = true
-          getGoods().then((data) => {
+          getGoods({
+            id: this.seller.id
+          }).then((data) => {
             this.goods = data
           })
         }

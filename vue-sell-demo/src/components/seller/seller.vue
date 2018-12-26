@@ -1,5 +1,5 @@
 <template>
-<cube-scroll class="seller">
+<cube-scroll class="seller" :options="sellerScrollOptions">
   <div class="seller-content">
     <div class="overview">
         <h1 class="title">{{seller.name}}</h1>
@@ -28,9 +28,9 @@
             </div>
           </li>
         </ul>
-        <div class="favorite">
+        <div class="favorite" @click="toggleFavorite">
           <span class="icon-favorite" :class="{'active':favorite}"></span>
-          <span class="text"></span>
+          <span class="text">{{favoriteText}}</span>
         </div>
       </div>
       <split></split>
@@ -53,7 +53,7 @@
       <split></split>
       <div class="pics">
         <h1 class="title">商家实景</h1>
-        <cube-scroll class="pic-wrapper">
+        <cube-scroll class="pic-wrapper" :options="picScrollOptions">
           <ul class="pic-list">
             <li class="pic-item"
                 v-for="(pic,index) in seller.pics"
@@ -85,12 +85,22 @@
 import Star from 'components/star/star'
 import Split from 'components/split/split'
 import SupportIco from 'components/support-ico/support-ico'
+import { saveToLocal, getLocal } from 'common/js/storage'
 
 export default {
   name: 'seller',
   data() {
     return {
-      favorite: false
+      favorite: false,
+      sellerScrollOptions: {
+        directionLockThreshold: 0,
+        click: false
+      },
+      picScrollOptions: {
+        scrollX: true,
+        stopPropagation: true,
+        directionLockThreshold: 0
+      }
     }
   },
   props: {
@@ -101,9 +111,22 @@ export default {
       }
     }
   },
+  created() {
+    this.favorite = getLocal(this.seller.id, 'favorite', false)
+  },
   computed: {
     seller() {
       return this.data.seller
+    },
+    favoriteText() {
+      return this.favorite ? '已收藏' : '收藏'
+    }
+  },
+  methods: {
+    toggleFavorite() {
+      this.favorite = !this.favorite
+      saveToLocal(this.seller.id, 'favorite', this.favorite)
+      saveToLocal(this.seller.id, 'favorites', 'hello')
     }
   },
   components: {
